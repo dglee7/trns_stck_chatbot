@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <title>양수도 필요상품조회 Q&A BOT</title>
+  <!-- Tableau Web Page(iframe) 임베드를 허용하는 CSP 설정 -->
+  <meta http-equiv="Content-Security-Policy" content="frame-ancestors 'self' https://*.tableau.com https://public.tableau.com;">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --primary-bg: #ffffff;
+      --primary-border: #d0d5dd;
+      --primary-text: #222;
+      --primary-accent: #0d6efd;
+    }
+    body {
+      margin: 0;
+      padding: 2rem 1rem;
+      font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--primary-bg);
+      color: var(--primary-text);
+      display: flex;
+      justify-content: center;
+    }
+    .app-container {
+      width: 680px; max-width: 100%;
+    }
+    h1 { margin: 0 0 1.5rem; font-size: 1.75rem; text-align: center; }
+    .input-row { display: flex; gap: .5rem; align-items: stretch; }
+    textarea {
+      flex: 1 1 auto; resize: vertical; min-height: 80px;
+      padding: .75rem 1rem; border: 1px solid var(--primary-border);
+      border-radius: 8px; font-size: 1rem;
+    }
+    button {
+      flex: 0 0 56px; height: 56px; border: none; cursor: pointer;
+      background: var(--primary-accent); color: #fff; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+    }
+    button:hover { background: #0b5ed7; }
+    button:active { background: #0949a8; }
+    button svg { width: 24px; height: 24px; fill: currentColor; }
+    #answer {
+      white-space: pre-wrap; border: 1px solid var(--primary-border);
+      border-radius: 8px; padding: 1rem; margin-top: 1rem; min-height: 120px;
+      font-size: 1rem; background: #f9fafb;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <h1>양수도 필요상품조회 Q&A BOT</h1>
+
+    <div class="input-row">
+      <textarea id="question" placeholder="양수도 필요상품조회 관련 문의사항을 말씀해주세요" autofocus></textarea>
+      <button id="sendBtn" aria-label="전송">
+        <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+      </button>
+    </div>
+    <div id="answer"></div>
+  </div>
+
+  <script>
+    const HOOK_URL = "https://hook.us2.make.com/lygugvd56f1hiyw4j0ihlaz7v31ax0dq";
+    const questionEl = document.getElementById("question");
+    const answerEl = document.getElementById("answer");
+    const sendBtn = document.getElementById("sendBtn");
+
+    async function sendQuestion() {
+      const q = questionEl.value.trim();
+      if (!q) return;
+      answerEl.textContent = "답변 생성 중...";
+      sendBtn.disabled = true;
+      try {
+        const res = await fetch(HOOK_URL, {
+          method: "POST",
+          mode: "cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ question: q })
+        });
+        if(!res.ok){ throw new Error(`HTTP ${res.status}`); }
+        const data = await res.json();
+        const ans = data.answer;
+        answerEl.textContent = typeof ans === "string" ? ans : JSON.stringify(ans, null, 2);
+      } catch (e) {
+        answerEl.textContent = `⚠️ 오류: ${e.message || e}`;
+      } finally {
+        sendBtn.disabled = false;
+      }
+    }
+
+    sendBtn.addEventListener("click", sendQuestion);
+    questionEl.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        sendQuestion();
+      }
+    });
+  </script>
+</body>
+</html>
