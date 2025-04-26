@@ -3,7 +3,6 @@
 <head>
   <meta charset="utf-8" />
   <title>양수도 필요상품조회 Q&A BOT</title>
-  <!-- Tableau Web Page(iframe) 임베드를 허용하는 CSP 설정 -->
   <meta http-equiv="Content-Security-Policy" content="frame-ancestors 'self' https://*.tableau.com https://public.tableau.com;">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
@@ -22,13 +21,11 @@
       display: flex;
       justify-content: center;
     }
-    .app-container {
-      width: 680px; max-width: 100%;
-    }
+    .app-container { width: 680px; max-width: 100%; }
     h1 { margin: 0 0 1.5rem; font-size: 1.75rem; text-align: center; }
     .input-row { display: flex; gap: .5rem; align-items: stretch; }
     textarea {
-      flex: 1 1 auto; resize: vertical; min-height: 80px;
+      flex: 1 1 auto; resize: vertical; min-height: 100px;
       padding: .75rem 1rem; border: 1px solid var(--primary-border);
       border-radius: 8px; font-size: 1rem;
     }
@@ -42,9 +39,11 @@
     button:active { background: #0949a8; }
     button svg { width: 24px; height: 24px; fill: currentColor; }
     #answer {
-      white-space: pre-wrap; border: 1px solid var(--primary-border);
-      border-radius: 8px; padding: 1rem; margin-top: 1rem; min-height: 120px;
-      font-size: 1rem; background: #f9fafb;
+      white-space: pre-wrap; word-break: break-word;
+      border: 1px solid var(--primary-border);
+      border-radius: 8px; padding: 1rem; margin-top: 1rem;
+      min-height: 160px; font-size: 1rem; line-height: 1.6;
+      background: #f9fafb; overflow-y: auto;
     }
   </style>
 </head>
@@ -53,7 +52,7 @@
     <h1>양수도 필요상품조회 Q&A BOT</h1>
 
     <div class="input-row">
-      <textarea id="question" placeholder="양수도 필요상품조회 관련 문의사항을 말씀해주세요" autofocus></textarea>
+      <textarea id="question" placeholder='궁금하신 내용에 대해 챗봇이 답변해드립니다.&#10;&#10;ex) "대시보드에 대해 전반적인 설명해주세요", &#10;"양수도가능여부는 어떤 로직으로 만들어졌나요?"' autofocus></textarea>
       <button id="sendBtn" aria-label="전송">
         <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
       </button>
