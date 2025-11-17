@@ -69,7 +69,7 @@
     async function sendQuestion() {
       const q = questionEl.value.trim();
       if (!q) return;
-      answerEl.textContent = "답변 생성 중...";
+      answerEl.textContent = "답변 생성 중 입니다... (약 1분 정도 소요)";
       sendBtn.disabled = true;
       try {
         const res = await fetch(HOOK_URL, {
@@ -99,6 +99,7 @@
   </script>
 </body>
 </html>
+
 
 
 
